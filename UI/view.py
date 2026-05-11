@@ -17,6 +17,8 @@ class View(ft.UserControl):
         self.btn_hello = None
         self.txt_result = None
         self.txt_container = None
+        self._ddLun = None
+        self.btnCerca = None
 
     def load_interface(self):
         # title
@@ -35,7 +37,18 @@ class View(ft.UserControl):
                                                   color="white",
                                                   width=200)
 
-        self._page.controls.append(ft.Row([self._btnAnalizzaOggetti, self._txtIdOggetto, self._btnCompConnessa],
+        self._page.controls.append(ft.Row([ft.Container(self._btnAnalizzaOggetti, width=250),
+                                           ft.Container(self._txtIdOggetto, width=250),
+                                           ft.Container(self._btnCompConnessa, width=250)],
+                                          alignment=ft.MainAxisAlignment.CENTER))
+
+        self._ddLun = ft.Dropdown(label="Lunghezza", border_color="orange", disabled=True)
+        self.btnCerca = ft.ElevatedButton(text="Cerca Oggetti",
+                                          on_click=self._controller.handleCerca,
+                                          bgcolor="orange",
+                                          color="white",
+                                          disabled=True)
+        self._page.controls.append(ft.Row([self._ddLun, self.btnCerca],
                                           alignment=ft.MainAxisAlignment.CENTER))
 
         # List View where the reply is printed

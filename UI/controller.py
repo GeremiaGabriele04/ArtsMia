@@ -8,6 +8,9 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
+    def handleCerca(self, e):
+        pass
+
     def handleAnalizzaOggetti(self, e):
         self._model.buildGraph()
         self._view.txt_result.controls.clear()
@@ -42,5 +45,19 @@ class Controller:
         self._view.txt_result.controls.clear()
         self._view.txt_result.controls.append(
             ft.Text(f"La componente connessa contenente l'oggetto con id {idOggetto} è composta di {sizeCompConn} nodi.", color="green"))
+
+        self._view._ddLun.disabled = False
+        self._view._btnCerca.disabled = False
+
+        lunValues = range(2, sizeCompConn)
+
+        for v in lunValues:
+            self._view._ddLun.options.append(ft.dropdown.Option(v))
+
+        lunValuesDD = map(lambda x:ft.dropdown.Option(x), lunValues)
+        self._view._ddLun.options = lunValues
+
+
+
         self._view.update_page()
 
