@@ -8,9 +8,6 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
-    def handleCerca(self, e):
-        pass
-
     def handleAnalizzaOggetti(self, e):
         self._model.buildGraph()
         self._view.txt_result.controls.clear()
@@ -49,15 +46,40 @@ class Controller:
         self._view._ddLun.disabled = False
         self._view._btnCerca.disabled = False
 
-        lunValues = range(2, sizeCompConn)
+        lunValues = list(range(2, sizeCompConn))
 
-        for v in lunValues:
-            self._view._ddLun.options.append(ft.dropdown.Option(v))
+        #for v in lunValues:
+        #    self._view._ddLun.options.append(ft.dropdown.Option(v))
 
-        lunValuesDD = map(lambda x:ft.dropdown.Option(x), lunValues)
-        self._view._ddLun.options = lunValues
+        lunValuesDD = list(map(lambda x: ft.dropdown.Option(x), lunValues))
 
-
+        self._view._ddLun.options = lunValuesDD
 
         self._view.update_page()
+
+    def handleCerca(self, e):
+        source = self._model.getNodeFromId(int(self._view._txtIdOggetto.value))
+
+        lun = self._view._ddLun.value
+
+        if lun is None:
+            self._view.txt_result.controls.clear()
+            self._view.txt_result.controls.append(
+                ft.Text("Attenzione, selezionare un valore di lunghezza fra le scelte proposte.", color = "red"))
+            self._view.update_page()
+            return
+
+        lunInt = int(lun)
+
+        path, cost = self._model.getOptPath(source, lunInt)
+        self._view.txt_result.controls.clear()
+        self._view.txt_result.controls.append(
+            ft.Text(f"Ho trovato un cammino che parte da {source} che ha un peso totale pari a {cost}.", color = "green"))
+        self._view.txt_result.controls.append(
+            ft.Text("Di seguito i nodi del cammino:", color = "green"))
+        for p in path:
+            self._view.txt_result.controls.append(ft.Text(p))
+
+        self._view.update_page()
+
 
